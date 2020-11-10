@@ -1,15 +1,15 @@
 # SlideShare to PDF
 
-A python script to help you back up your SlideShare presentations to PDF.
+- Python Version：3.8.5
+  - If you can not found python, You can try run script:
+    - `sudo add-apt-repository ppa:deadsnakes/ppa`
+    - `sudo apt-get update`
+    - `sudo apt-get install python3.6`
+
+- A python script to help you back up your SlideShare presentations to PDF.
 
 
 ## Requirements
-
-This script has been tested with Vagrant on an **Ubuntu Trusty 64** VM (Vagrantfile included) and requires the following packages:
-
-- [ImageMagick](http://www.imagemagick.org/script/index.php)
-- [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
-- [LXML](http://lxml.de/)
 
 They can be installed by running:
 
@@ -17,6 +17,19 @@ They can be installed by running:
 apt-get update
 apt-get install -y imagemagick python-bs4 python-lxml
 ````
+
+This script has been tested on an **WSL2 Ubuntu 20.04**  and requires the following packages:
+
+- [ImageMagick-6](https://github.com/ImageMagick/ImageMagick6)
+  - If you get the following error `convert-im6.q16: attempt to perform an operation not allowed by the security policy `PDF' @ error/constitute.c/IsCoderAuthorized/408.`
+    - You can try to modify the `/etc/ImageMagick-6/policy.xml` file
+      - Modify the comment in paragraph `<policy domain="coder" rights="none" pattern="PDF" />`
+      - to `<policy domain="coder" rights="read | write" pattern="PDF" />`
+- [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
+- [LXML](http://lxml.de/)
+  - If you get the following erro `lxml not found please install it`
+    - You can try to run `pip3 install lxml` and `pip3 install tushare`
+    - If can not found pip, You can try run `apt install python3-pip`
 
 
 ## Usage
@@ -97,7 +110,9 @@ Show help message and exit.
 
 
 ## Development
-This repository includes a Vagrantfile. If you'd like to collaborate, this should help jumpstart the development process.
+~~This repository includes a Vagrantfile. If you'd like to collaborate, this should help jumpstart the development process.~~
+Have tried debugging on WSL2 and confirmed that it works normally
 
 ## Contributors
 - [tdrk1980](https://github.com/tdrk1980)
+- [weweaaa](https://github.com/weweaaa)

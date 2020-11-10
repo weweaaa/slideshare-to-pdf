@@ -7,7 +7,7 @@ import lxml
 import errno
 import socket
 import shutil
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import argparse
 import requests
 import tempfile
@@ -35,7 +35,7 @@ args = parser.parse_args()
 if args.input:
     url = args.input
 else:
-    url = raw_input('Input the SlideShare URL you want to convert: ')
+    url = input('Input the SlideShare URL you want to convert: ')
 
 # if output was specified, split path into file name and directory
 if args.output:
@@ -74,7 +74,7 @@ images = None
 try:
     html = requests.get(url)
     html.raise_for_status()
-except Exception, e:
+except Exception as e:
     # terminate script
     sys.exit('Could not download {}. {}'.format(url, e))
 else:
@@ -102,11 +102,11 @@ for i, image in enumerate(images, start=1):
 
     # download slide
     if args.verbose:
-        print('Downloading slide {}...'.format(str(i)))
+        print(('Downloading slide {}...'.format(str(i))))
 
     try:
-        urllib.urlretrieve(remote_slide, filename=local_slide)
-    except Exception, e:
+        urllib.request.urlretrieve(remote_slide, filename=local_slide)
+    except Exception as e:
         # cleanup and terminate
         shutil.rmtree(dir_tmp)
         sys.exit('Could not download slide-{}. {}'.format(str(i), e))
@@ -125,19 +125,19 @@ try:
         # detection of magick command
         if distutils.spawn.find_executable('magick'):
             imagick = 'magick'
-            print('\'magick\' is to be used. If \'convert\' is correct one, please set --use_convert') if args.verbose else None
+            print(('\'magick\' is to be used. If \'convert\' is correct one, please set --use_convert') if args.verbose else None)
     subprocess.call('{} {} -quality 100 {}'.format(imagick, downloaded_slides_str,  output_path), shell=True)
-except Exception, e:
+except Exception as e:
     sys.exit('Could not convert slides to PDF. {}'.format(e))
 
 # copy jpg files if requested
 if args.jpg:
     dir_jpg = os.path.join(output_dir, os.path.splitext(output_file)[0])
     if os.path.exists(dir_jpg):
-        print('Delete old folder {}'.format(dir_jpg)) if args.verbose else None
+        print(('Delete old folder {}'.format(dir_jpg)) if args.verbose else None)
         shutil.rmtree(dir_jpg)
     try:
-        print('Create new folder and copy files to {}'.format(dir_jpg)) if args.verbose else None
+        print(('Create new folder and copy files to {}'.format(dir_jpg)) if args.verbose else None)
         shutil.copytree(dir_tmp, dir_jpg)
     except Exception as e:
         # cleanup and terminate
@@ -150,7 +150,7 @@ shutil.rmtree(dir_tmp)
 # check if file was created
 if os.path.isfile(output_path):
     if args.verbose:
-        print('Your file has been successfully created at {}'.format(output_path))
+        print(('Your file has been successfully created at {}'.format(output_path)))
 
     sys.exit(0)
 else:
